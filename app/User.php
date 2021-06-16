@@ -28,6 +28,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function getNameAttribute($value){
+        return ucfirst($value);
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

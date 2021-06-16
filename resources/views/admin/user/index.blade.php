@@ -1,8 +1,5 @@
 @extends('admin.layouts.app')
 
-@section('headSection')
-<link rel="stylesheet" href="{{ asset('admin/plugins/datatables/dataTables.bootstrap.css') }}">
-@endsection
 @section('main-content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -25,9 +22,7 @@
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Title</h3>
-        {{-- @can('posts.create', Auth::user()) --}}
-        <a class='col-lg-offset-5 btn btn-success' href="{{ route('post.create') }}">Add New</a>
-        {{-- @endcan --}}
+        <a class='col-lg-offset-5 btn btn-success' href="{{ route('user.create') }}">Add New</a>
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
             <i class="fa fa-minus"></i></button>
@@ -46,29 +41,30 @@
                         <thead>
                         <tr>
                           <th>S.No</th>
-                          <th>post title</th>
-                          <th>Sub title</th>
-                          <th>Slug</th>
-                          {{-- @can('posts.update', Auth::user()) --}}
-
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Role</th>
+                          <th>Status</th>
                           <th>Edit</th>
-                          {{-- @endcan --}}
                           <th>Delete</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($post as $post)
+
+                        @foreach ($user as $user)
                           <tr>
                             <td>{{ $loop->index + 1 }}</td>
-                            <td>{{ $post->title }}</td>
-                            <td>{{ $post->subtitle }}</td>
-                            <td>{{ $post->slug }}</td>
-                            {{-- @can('posts.update', Auth::user()) --}}
-
-                            <td><a href="{{ route('post.edit',$post->id) }}"><span class="glyphicon glyphicon-edit"></span></a></td>
-                            {{-- @endcan --}}
+                            <td>{{ $user->username }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>
+                                @foreach($user->roles as $role)
+                                {{ $role->name }},
+                                @endforeach
+                            </td>
+                            <td>{{ $user->status ? "active" : "Inactive" }}</td>
+                              <td><a href="{{ route('user.edit',$user->id) }}"><span class="glyphicon glyphicon-edit"></span></a></td>
                               <td>
-                                <form id="delete-form-{{ $post->id }}" method="post" action="{{ route('post.destroy',$post->id) }}" style="display: none">
+                                <form id="delete-form-{{ $user->id }}" method="post" action="{{ route('user.destroy',$user->id) }}" style="display: none">
                                   {{ csrf_field() }}
                                   {{ method_field('DELETE') }}
                                 </form>
@@ -76,7 +72,7 @@
                                 if(confirm('Are you sure, You Want to delete this?'))
                                     {
                                       event.preventDefault();
-                                      document.getElementById('delete-form-{{ $post->id }}').submit();
+                                      document.getElementById('delete-form-{{ $user->id }}').submit();
                                     }
                                     else{
                                       event.preventDefault();

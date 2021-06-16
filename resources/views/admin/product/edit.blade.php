@@ -31,65 +31,65 @@
           @include('includes.messages')
           <!-- /.box-header -->
           <!-- form start -->
-
-          <form role="form" action="{{ route('post.store') }}" method="post" enctype="multipart/form-data">
+          <form role="form" action="{{ route('product.update',$product->id) }}" method="product" enctype="multipart/form-data">
             {{ csrf_field() }}
+            {{ method_field('PATCH') }}
             <div class="box-body">
               <div class="col-lg-6">
                 <div class="form-group">
-                  <label for="title">Post Title</label>
-                  <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                  <label for="title">product Title</label>
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Title" value="{{ $product->title }}">
                 </div>
 
                 <div class="form-group">
-                  <label for="subtitle">Post Sub Title</label>
-                  <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder="Sub Title">
+                  <label for="description">product Sub Title</label>
+                  <input type="text" class="form-control" id="description" name="description" placeholder="Sub Title" value="{{ $product->description }}">
                 </div>
 
                 <div class="form-group">
-                  <label for="slug">Post Slug</label>
-                  <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug">
+                  <label for="slug">product Slug</label>
+                  <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug" value="{{ $product->slug }}">
                 </div>
 
               </div>
               <div class="col-lg-6">
-
+                <br>
                 <div class="form-group">
-                    <div class="pull-right">
-                      <label for="image">File input</label>
-                      <input type="file" name="image" id="image">
-                    </div>
-                    <div class="checkbox pull-left">
-                      <label>
-                        <input type="checkbox" name="status" value="1"> Publish
-                      </label>
-                    </div>
+                  <div class="pull-right">
+                    <label for="image">File input</label>
+                    <input type="file" name="image" id="image">
                   </div>
-                  <br>
-                  <div class="form-group" style="margin-top:10px;">
-                    <label>Select Tags</label>
-                    <select class="form-control select2 select2-hidden-accessible" name="tags[]" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                      @foreach($tags as $tags)
-                        <option value="{{ $tags->id }}">{{ $tags->name }}</option>
-                     @endforeach
-                    </select>
+                  <div class="checkbox pull-left">
+                    <label>
+                      <input type="checkbox" name="status" value="1" @if ($product->status == 1)
+                        {{'checked'}}
+                      @endif> Publish
+                    </label>
                   </div>
-                  <div class="form-group" style="margin-top:10px;">
-                    <label>Select Category</label>
-                    <select class="form-control select2 select2-hidden-accessible" name="categories[]" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                      @foreach($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                     @endforeach
-                    </select>
-                  </div>
-
                 </div>
+                <br>
+                <div class="form-group" style="margin-top:18px;">
+                  <label>Select Category</label>
+                  <select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true" name="categories[]">
+                    @foreach ($categories as $category)
+                    <option value="{{ $category->id }}"
+                    @foreach ($product->categories as $productCategory)
+                      @if ($productCategory->id == $category->id)
+                        selected
+                      @endif
+                    @endforeach
+                    >{{ $category->name }}</option>
+                    @endforeach
+                  </select>
+                </div>
+
+              </div>
             </div>
             <!-- /.box-body -->
 
             <div class="box">
              <div class="box-header">
-               <h3 class="box-title">Write Post Body Here
+               <h3 class="box-title">Write product Body Here
                  <small>Simple and fast</small>
                </h3>
                <!-- tools box -->
@@ -101,13 +101,13 @@
                </div>
                <!-- /.box-header -->
                <div class="box-body pad">
-                 <textarea name="body" style="width: 100%; height: 500px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" id="editor1"></textarea>
-               </div>
+                <textarea name="body" style="width: 100%; height: 500px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" id="editor1">{{ $product->body }}</textarea>
+              </div>
              </div>
 
              <div class="box-footer">
               <input type="submit" class="btn btn-primary">
-              <a href='{{ route('post.index') }}' class="btn btn-warning">Back</a>
+              <a href='{{ route('product.index') }}' class="btn btn-warning">Back</a>
             </div>
           </form>
         </div>
@@ -131,6 +131,8 @@
       // Replace the <textarea id="editor1"> with a CKEditor
       // instance, using default configuration.
       CKEDITOR.replace('editor1');
+      //bootstrap WYSIHTML5 - text editor
+      $(".textarea").wysihtml5();
     });
 </script>
 <script>

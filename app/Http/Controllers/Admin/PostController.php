@@ -8,6 +8,7 @@ use App\Model\User\Post;
 use App\Model\User\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller
@@ -39,7 +40,7 @@ class PostController extends Controller
             'categories' => Category::get(['id', 'name']),
             'tags' => Tag::get(['name', 'id'])
         ]);
-    }
+}
 
     /**
      * Store a newly created resource in storage.

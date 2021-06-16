@@ -31,60 +31,51 @@
           @include('includes.messages')
           <!-- /.box-header -->
           <!-- form start -->
-          <form role="form" action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+          <form role="form" action="{{ route('user.update',$user->id) }}" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
+            {{ method_field('PATCH') }}
             <div class="box-body">
               <div class="col-lg-6">
                 <div class="form-group">
                   <label for="username">Name</label>
-                  <input type="text" class="form-control" id="username" name="username" placeholder="user name" value = "{{ old('username') }}">
+                  <input type="text" class="form-control" id="username" name="username" placeholder="username" value = "@if(old('username')) {{ old('username') }} @else {{ $user->username }} @endif">
                 </div>
 
                 <div class="form-group">
                   <label for="email">Email</label>
-                  <input type="text" class="form-control" id="email" name="email" placeholder="Email" value = "{{ old('email') }}">
+                  <input type="text" class="form-control" id="email" name="email" placeholder="Email" value = "@if(old('email')) {{ old('email') }}  @else {{ $user->email }} @endif">
                 </div>
 
-                <div class="form-group">
-                    <label for="password">password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="password">
-                  </div>
 
-                  <div class="form-group">
-                    <label for="password_confirmation">Confirm Password</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password">
-                  </div>
 
 
                   <div class="form-group">
                     <label for="status">Status</label>
                     <div class="checkbox">
-                    <label for="status"><input type="checkbox" class="checkbox" id="status" name="status" @if(old('status') == 1)
+                    <label for="status"><input type="checkbox" class="checkbox" id="status" name="status" @if(old('status') == 1 || $user->status==1)
                         checked @endif value="1">status</label>
                 </div>
                   </div>
 
+
                   <div class="form-group">
                       <label for="">Assigned Role</label>
-                      <div class="fow">
+                      <div class="row">
                           @foreach ($role as $role)
                           <div class="col-lg-3">
                             <div class="checkbox">
-                                <label for =""><input type="checkbox" name="role[]" value="{{ $role->id }}" >{{ $role->name }}</label>
+                                <label><input type="checkbox" name="role[]" value="{{ $role->id }}"
+                                    @foreach($user->roles as $user_role)
+                                    @if($user_role->id == $role->id)
+                                    checked
+                                     @endif
+                                     @endforeach>{{ $role->name }}</label>
                             </div>
                         </div>
                           @endforeach
                     </div>
-                </div>
 
-                {{-- <div class="col-lg-4">
-                    <label for="">Assigned roles</label>
-                     @foreach ($role as $roles)
-                            <div class="checkbox">
-                                <label for=""><input type="checkbox" name="role[]" value="{{ $roles->id }}">{{ $roles->name }}</label>
-                            </div>
-                    @endforeach
-                </div> --}}
+                      </div>
               </div>
             </div>
             <!-- /.box-body -->

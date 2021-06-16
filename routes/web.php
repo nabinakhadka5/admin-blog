@@ -27,7 +27,7 @@ Route::group(['namespace' => 'Front'],function(){
 
 });
 
-Route::group(['namespace' => 'Admin','middleware'=>'auth:superadmin'],function(){
+Route::group(['namespace' => 'Admin'],function(){
     Route::get('admins','HomeController@index')->name('admin.home');
     // Post route
 	Route::resource('admin/post','PostController');
@@ -35,7 +35,11 @@ Route::group(['namespace' => 'Admin','middleware'=>'auth:superadmin'],function()
     Route::resource('admin/category','CategoryController');
     // Tag Routes
     Route::resource('admin/tag','TagController');
-
+    // Role Routes
+    Route::resource('admin/role','RoleController');
+    Route::resource('admin/user','UserController');
+    Route::resource('admin/permission','PermissionController');
+    Route::resource('admin/product','ProductController');
 
     // Admin Login
     Route::get('admin-login','Auth\LoginController@showLoginForm')->name('admin.login');
